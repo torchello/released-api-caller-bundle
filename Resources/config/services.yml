@@ -1,0 +1,10 @@
+services:
+    released.api_caller.transport:
+        class: Released\ApiCallerBundle\Transport\Transport
+
+    released.api_caller.factory:
+        class: Released\ApiCallerBundle\Service\Factory\ApiCallerFactory
+        arguments:
+          - "@released.api_caller.transport"
+          - "@jms_serializer.serializer"
+          - "%released.api_caller.cases%"
