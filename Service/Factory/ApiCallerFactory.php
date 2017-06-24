@@ -35,17 +35,17 @@ class ApiCallerFactory
 
     /**
      * @param string $case
+     * @param TransportInterface|null $transport
      * @return ApiCallerInterface
-     * @throws ApiCallerException
      */
-    public function createApiCaller($case)
+    public function createApiCaller($case, TransportInterface $transport = null)
     {
         $this->checkCase($case);
 
         if (!isset($this->instances[$case])) {
             $caseConfig = $this->cases[$case];
 
-            $instance = new ApiCaller($this->transport, $this->serializer, $caseConfig['domain'], $caseConfig['endpoints']);
+            $instance = new ApiCaller($transport ?? $this->transport, $this->serializer, $caseConfig['domain'], $caseConfig['endpoints']);
             $this->instances[$case] = $instance;
         }
 
