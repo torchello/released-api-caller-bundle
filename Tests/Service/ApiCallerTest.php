@@ -23,7 +23,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         $apis = [];
 
         $caller = new ApiCaller(new StubTransport(), new StubSerializer(), $domain, $apis);
-        $caller->makeRequest('test');
+        $caller->makeRequest('test', null);
     }
 
     /**
@@ -38,7 +38,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         $apis['test'] = ['name' => 'Test', 'path' => '/path/{param}/{param1}'];
 
         $caller = new ApiCaller(new StubTransport(), new StubSerializer(), $domain, $apis);
-        $caller->makeRequest('test');
+        $caller->makeRequest('test', null);
     }
 
     /**
@@ -62,7 +62,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $caller = new ApiCaller(new StubTransport(), new StubSerializer(), $domain, $apis);
-        $caller->makeRequest('test', ['some' => '']);
+        $caller->makeRequest('test', ['some' => ''], null);
     }
 
     public function testShouldMakeRequest()
@@ -94,7 +94,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         $response = $caller->makeRequest('test', [
             'param' => 'value',
             'file' => $fileContent,
-        ]);
+        ], null);
 
         $this->assertEquals($transportResponse, $response);
     }
@@ -125,7 +125,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['some casted value']);
 
         // WHEN
-        $response = $caller->makeRequest('test');
+        $response = $caller->makeRequest('test', null);
 
         $this->assertEquals(['some casted value'], $response);
     }
@@ -159,7 +159,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         $response = $caller->makeRequest('test', [], null, [
             'Header A' => 3,
             'Header C' => 4,
-        ]);
+        ], null);
 
         $this->assertEquals($transportResponse, $response);
     }
@@ -203,7 +203,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         $response = $caller->makeRequest('test', [
             'param' => 'value',
             'a' => 'b',
-        ], $callback);
+        ], $callback, null);
 
         $this->assertEquals($transportResponse, $response);
     }
@@ -227,7 +227,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new TransportResponse("some content", 500));
 
         $caller = new ApiCaller($transport, new StubSerializer(), $domain, $apis);
-        $caller->makeRequest('test');
+        $caller->makeRequest('test', null);
     }
 
 }

@@ -49,18 +49,18 @@ class ApiCaller implements ApiCallerInterface
     /**
      * {@inheritdoc}
      */
-    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = [])
+    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = null, $domain = null)
     {
         $config = $this->checkApi($api, $values);
 
         $values = $this->cleanValues($values);
 
-        $path = $config->buildPath($values);
+        $path = $config->buildPath($values, $config->getParams());
         $data = $config->filterParams($values);
         $files = $config->filterFiles($values);
         $headers = $config->mergeHeaders($headers);
 
-        $url = $this->domain . $path;
+        $url = ($domain ?? $this->domain) . $path;
         $method = $config->getMethod();
         try {
             $result = $this->transport->request($url, $method, $data, $headers, null, $files);
@@ -104,7 +104,8 @@ class ApiCaller implements ApiCallerInterface
         $config = $this->apis[$api];
 
         $notExistingParams = [];
-        foreach ($config->getParams() as $key => $param) {
+        $params = $config->getParams();
+        foreach ($params as $key => $param) {
             if (!isset($values[$key]) && !isset($param['value'])) {
                 $notExistingParams[] = $key;
             }
@@ -115,7 +116,7 @@ class ApiCaller implements ApiCallerInterface
         }
 
         foreach ($config->getPathParams() as $key => $param) {
-            if (!isset($values[$key])) {
+            if (!isset($values[$key]) && !isset($params[$key])) {
                 $notExistingParams[] = $key;
             }
         }

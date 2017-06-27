@@ -109,13 +109,18 @@ class ApiCallerConfig
 
     /**
      * @param $values
+     * @param $params
      * @return string
      */
-    public function buildPath($values)
+    public function buildPath($values, $params)
     {
         $replace = [];
         foreach ($this->pathParams as $key => $value) {
-            $replace[sprintf('{%s}', $key)] = urlencode($values[$key]);
+            if (isset($values[$key])) {
+                $replace[sprintf('{%s}', $key)] = urlencode($values[$key]);
+            } else if (isset($params[$key]) && isset($params[$key]['value'])) {
+                $replace[sprintf('{%s}', $key)] = urlencode($params[$key]['value']);
+            }
         }
 
         $path = strtr($this->path, $replace);
@@ -235,7 +240,7 @@ class ApiCallerConfig
             return $headers;
         }
 
-        return array_merge($this->headers, $headers);
+        return array_merge($this->headers, (array)$headers);
     }
 
 }

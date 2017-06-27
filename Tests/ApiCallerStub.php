@@ -11,7 +11,7 @@ class ApiCallerStub implements ApiCallerInterface
     /**
      * {@inheritdoc}
      */
-    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = null)
+    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = null, $domain = null)
     {
 
     }

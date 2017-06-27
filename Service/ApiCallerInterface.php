@@ -16,9 +16,9 @@ interface ApiCallerInterface
      * @param array $values
      * @param ApiCallerListenerInterface $listener
      * @param array $headers
+     * @param null $domain
      * @return TransportResponse
-     * @throws ApiCallerException
      */
-    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = null);
+    public function makeRequest($api, $values = [], ApiCallerListenerInterface $listener = null, $headers = null, $domain = null);
 
 }
