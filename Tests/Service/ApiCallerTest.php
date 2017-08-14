@@ -84,7 +84,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
                 $domain . "path/value",
                 StubTransport::METHOD_POST,
                 [],
-                [],
+                null,
                 null,
                 ['file' => $fileContent]
             )
@@ -127,7 +127,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
         // WHEN
         $response = $caller->makeRequest('test', null);
 
-        $this->assertEquals(['some casted value'], $response);
+        $this->assertEquals(new TransportResponse(['some casted value']), $response);
     }
 
     public function testShouldMergeHeaders()

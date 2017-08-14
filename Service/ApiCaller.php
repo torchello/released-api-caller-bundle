@@ -5,6 +5,7 @@ namespace Released\ApiCallerBundle\Service;
 
 
 use JMS\Serializer\SerializerInterface as JmsSerializerInterface;
+use PHPUnit\Framework\ExpectationFailedException;
 use Released\ApiCallerBundle\Exception\ApiCallerException;
 use Released\ApiCallerBundle\Service\Util\ApiCallerConfig;
 use Released\ApiCallerBundle\Service\Util\ApiCallerListenerInterface;
@@ -65,6 +66,8 @@ class ApiCaller implements ApiCallerInterface
         try {
             $result = $this->transport->request($url, $method, $data, $headers, null, $files);
         } catch (\PHPUnit_Framework_Exception $exception) {
+            throw $exception;
+        } catch (ExpectationFailedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             $result = new TransportResponse("Exception: " . $exception->getMessage(), $exception->getCode()); ;
@@ -136,6 +139,8 @@ class ApiCaller implements ApiCallerInterface
      */
     private function cleanValues($values)
     {
+        $values = $values ?? [];
+
         foreach ($values as $key => $value) {
             if (is_object($value)) {
                 $normalizer = new GetSetMethodNormalizer();

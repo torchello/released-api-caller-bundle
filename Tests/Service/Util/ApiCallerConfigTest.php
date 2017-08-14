@@ -66,7 +66,7 @@ class ApiCallerConfigTest extends \PHPUnit_Framework_TestCase
             'empty' => 'some',
             'param' => 'value1',
             'param2' => '%value2&',
-        ]);
+        ], []);
 
         // THEN
         $this->assertEquals("/test/value1/value1/%25value2%26", $result);
