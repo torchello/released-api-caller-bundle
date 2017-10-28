@@ -7,6 +7,7 @@ namespace Released\ApiCallerBundle\Service;
 use JMS\Serializer\SerializerInterface as JmsSerializerInterface;
 use PHPUnit\Framework\ExpectationFailedException;
 use Released\ApiCallerBundle\Exception\ApiCallerException;
+use Released\ApiCallerBundle\Exception\ApiResponseException;
 use Released\ApiCallerBundle\Service\Util\ApiCallerConfig;
 use Released\ApiCallerBundle\Service\Util\ApiCallerListenerInterface;
 use Released\ApiCallerBundle\Transport\TransportInterface;
@@ -65,8 +66,6 @@ class ApiCaller implements ApiCallerInterface
         $method = $config->getMethod();
         try {
             $result = $this->transport->request($url, $method, $data, $headers, null, $files);
-        } catch (\PHPUnit_Framework_Exception $exception) {
-            throw $exception;
         } catch (ExpectationFailedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
@@ -78,7 +77,7 @@ class ApiCaller implements ApiCallerInterface
         }
 
         if (!$result->isOk()) {
-            throw new ApiCallerException("Response status is " . $result->getStatus());
+            throw new ApiResponseException($result, "Response status is " . $result->getStatus());
         }
 
         if (!is_null($config->getResponseClass())) {

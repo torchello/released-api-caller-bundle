@@ -209,7 +209,7 @@ class ApiCallerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Released\ApiCallerBundle\Exception\ApiCallerException
+     * @expectedException \Released\ApiCallerBundle\Exception\ApiResponseException
      * @expectedExceptionMessage Response status is 500
      */
     public function testShouldThrowNotSuccessful()
