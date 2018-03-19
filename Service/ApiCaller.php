@@ -77,7 +77,10 @@ class ApiCaller implements ApiCallerInterface
         }
 
         if (!$result->isOk()) {
-            throw new ApiResponseException($result, "Response status is " . $result->getStatus());
+            throw new ApiResponseException(
+                $result,
+                sprintf('[%s] %s', $result->getStatus(), $result->getContent())
+            );
         }
 
         if (!is_null($config->getResponseClass())) {
